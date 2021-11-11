@@ -43,6 +43,8 @@ async function run() {
         const servicesCollection = database.collection(process.env.COLLECTION_NAME1);
         const ordersCollection = database.collection(process.env.COLLECTION_NAME2);
         const usersCollection = database.collection(process.env.COLLECTION_NAME3);
+        const reviewsCollection = database.collection(process.env.COLLECTION_NAME4);
+
         //post api to add service
         app.post('/addService', async (req, res) => {
             const newUser = req.body;
@@ -63,7 +65,18 @@ async function run() {
             }
         })
 
-        //use post to load the data of local storage
+        // delete  api to delete a service 
+        app.delete('/deleteService/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(' deleteService/id ', id);
+            const query = { id };
+            const result = await servicesCollection.deleteOne(query);
+            console.log('deleting service with id ', result);
+            res.json(result);
+        })
+
+
+        //use post to load the data of ordered product in a item
         app.post('/service/byId', async (req, res) => {
             console.log('the keys of product : ', req.body);
             const serviceIds = req.body;
@@ -81,6 +94,23 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         });
+
+        //get api for all reviews
+        app.get('/reviews', async (req, res) => {
+            console.log('get request for review : ');
+            const cursor = reviewsCollection.find({});
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        });
+
+        //post api to submit review
+        app.post('/submitReview', async (req, res) => {
+            console.log('review body : ', req.body);
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
+            console.log('Successfully inserted');
+            res.json(result);
+        })
 
         //get api for all orders
         app.get('/orders', verifyToken, async (req, res) => {
@@ -128,9 +158,10 @@ async function run() {
             console.log(' delete/id ', id);
             const query = { _id: ObjectId(id) };
             const result = await ordersCollection.deleteOne(query);
-            console.log('deleting user with id ', result);
+            console.log('deleting order with id ', result);
             res.json(result);
         })
+
         // update  api to change status of a order
         app.put('/updateOrder/:id', async (req, res) => {
             const id = req.params.id;
@@ -204,6 +235,8 @@ async function run() {
                 res.status(403).json({ message: 'you do not have access to make admin' })
             }
         })
+
+
 
 
     } finally {
