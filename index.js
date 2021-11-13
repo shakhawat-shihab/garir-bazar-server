@@ -68,7 +68,7 @@ async function run() {
         // delete  api to delete a service 
         app.delete('/deleteService/:id', verifyToken, async (req, res) => {
             const requester = req.decodedEmail;
-            console.log('requester', requester);
+            console.log('requester ', requester);
             if (requester) {
                 const id = req.params.id;
                 console.log(' deleteService/id ', id);
@@ -122,16 +122,10 @@ async function run() {
 
         //get api for all orders
         app.get('/orders', verifyToken, async (req, res) => {
-            const requester = req.decodedEmail;
-            console.log('requester', requester);
-            if (requester) {
-                const cursor = ordersCollection.find({});
-                const orders = await cursor.toArray();
-                res.send(orders);
-            }
-            else {
-                res.status(403).json({ message: 'You do not have access to all orders.' });
-            }
+            const cursor = ordersCollection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders);
+
         });
 
         //post api to place a order
@@ -146,7 +140,7 @@ async function run() {
         //get api to show my order (with token verification)
         app.get('/myOrder', verifyToken, async (req, res) => {
             //http://localhost:5000/myOrder?email=shihab@gmail.com
-            const email = req.query.email
+            const email = req.query.email;
             const requester = req.decodedEmail;
             console.log('requester', requester);
             if (requester) {
