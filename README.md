@@ -11,11 +11,18 @@ Live-site: https://garir-bazar.herokuapp.com/
 * /deleteService/:id ==> delete request to delete a service passed by params ,
 * /service/byId ==> post request to load the Services having the given IDs,
 * /services/car ==> get request to load all cars from services
-* For Reviews the following routes of api are used /reviews,  /submitReview 
-* For Orders the following routes of api are used /orders,  /placeOrder, /myOrder, /deleteOrder/:id, /updateOrder/:id
-* FOr managing users the following routes of api are used /users, /users, /users/:email, /users/admin, 
+* For Reviews the following routes of api are used:
+* /reviews ==> get request to load all reviews,
+* /submitReview ==> post request to submit a review
+* For Orders the following routes of api are used:
+* /orders ==> get request load all the orders,
+* /placeOrder ==> post request to place an order,
+* /myOrder ==> get reuest to load my orderr with JWT token,
+* /deleteOrder/:id ==> delete request to delete an order ,
+* /updateOrder/:id ==> put rerquest to update an order
+* For managing users the following routes of api are used:
+* /users ==> post api to add an user,
+* /user ==> put api to add an user,
+* /users/:email ==> get API to know user role,
+* /users/admin ==> put api to make a user admin, 
 
-* /getService is implemented using get API.
-* /addService is implemented using post API.
-* /deleteOrder is implemented using delete API.
-* /updateOrder/:id is implemented using put API.
