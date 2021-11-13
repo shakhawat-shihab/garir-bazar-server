@@ -67,19 +67,14 @@ async function run() {
 
         // delete  api to delete a service 
         app.delete('/deleteService/:id', verifyToken, async (req, res) => {
-            const requester = req.decodedEmail;
-            console.log('requester ', requester);
-            if (requester) {
-                const id = req.params.id;
-                console.log(' deleteService/id ', id);
-                const query = { id };
-                const result = await servicesCollection.deleteOne(query);
-                console.log('deleting service with id ', result);
-                res.json(result);
-            }
-            else {
-                res.status(403).json({ message: 'You do not have access to delete orders.' });
-            }
+
+            const id = req.params.id;
+            console.log(' deleteService/id ', id);
+            const query = { id };
+            const result = await servicesCollection.deleteOne(query);
+            console.log('deleting service with id ', result);
+            res.json(result);
+
 
         })
 
@@ -122,10 +117,16 @@ async function run() {
 
         //get api for all orders
         app.get('/orders', verifyToken, async (req, res) => {
-            const cursor = ordersCollection.find({});
-            const orders = await cursor.toArray();
-            res.send(orders);
-
+            const requester = req.decodedEmail;
+            console.log('requester', requester);
+            if (requester) {
+                const cursor = ordersCollection.find({});
+                const orders = await cursor.toArray();
+                res.send(orders);
+            }
+            else {
+                res.status(403).json({ message: 'You do not have access to all orders.' });
+            }
         });
 
         //post api to place a order
