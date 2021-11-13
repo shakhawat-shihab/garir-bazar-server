@@ -66,13 +66,21 @@ async function run() {
         })
 
         // delete  api to delete a service 
-        app.delete('/deleteService/:id', async (req, res) => {
-            const id = req.params.id;
-            console.log(' deleteService/id ', id);
-            const query = { id };
-            const result = await servicesCollection.deleteOne(query);
-            console.log('deleting service with id ', result);
-            res.json(result);
+        app.delete('/deleteService/:id', verifyToken, async (req, res) => {
+            const requester = req.decodedEmail;
+            console.log('requester', requester);
+            if (requester) {
+                const id = req.params.id;
+                console.log(' deleteService/id ', id);
+                const query = { id };
+                const result = await servicesCollection.deleteOne(query);
+                console.log('deleting service with id ', result);
+                res.json(result);
+            }
+            else {
+                res.status(403).json({ message: 'You do not have access to delete orders.' });
+            }
+
         })
 
 
@@ -153,7 +161,7 @@ async function run() {
         })
 
         // delete  api to delete an order
-        app.delete('/deleteOrder/:id', async (req, res) => {
+        app.delete('/deleteOrder/:id', verifyToken, async (req, res) => {
             const id = req.params.id;
             console.log(' delete/id ', id);
             const query = { _id: ObjectId(id) };
